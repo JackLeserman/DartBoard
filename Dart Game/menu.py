@@ -74,7 +74,7 @@ def player_name_photo(num_players):
     player_names = Label(window, text=convert_player_list_to_text(player_name_list), font=Font(family='Helvetica', size=12))
     player_names.grid(column=2, row =8)
 
-    enter_button = Button(window,text="Continue",command = lambda: get_name_and_add(name_entry.get(),num_players), font=Font(family='Helvetica', size=30, weight='bold'))
+    enter_button = Button(window,text="Add Player",command = lambda: get_name_and_add(name_entry.get(),num_players), font=Font(family='Helvetica', size=30, weight='bold'))
     enter_button.grid(column=2,row=5)
     enter_button.wait_variable(ready)
     
