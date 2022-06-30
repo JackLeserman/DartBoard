@@ -49,10 +49,21 @@ def confirm_players():
     players = Label(window, text=convert_player_list_to_text(player_name_list), font=Font(family='Helvetica', size=20))
     players.grid(column=2, row =2)
 
-    yes_button = Button(window,text="Yes",command = lambda: clearFrame(window), font=Font(family='Helvetica', size=15, weight='bold'))
+    yes_button = Button(window,text="Yes",command = lambda: select_game(), font=Font(family='Helvetica', size=15, weight='bold'))
     yes_button.grid(column=2,row=5)
     no_button = Button(window,text="No",command = lambda: main_menu(), font=Font(family='Helvetica', size=15, weight='bold'))
     no_button.grid(column=2,row=6)
+
+def select_game():
+    clearFrame(window)
+    players_title = Label(window, text="Select Game Mode", font=Font(family='Helvetica', size=30, weight='bold'))
+    players_title.grid(column=2, row =1)
+    dem_button = Button(window,text="Demolition",command = lambda: demolition(), font=Font(family='Helvetica', size=15, weight='bold'))
+    dem_button.grid(column=1,row=2)
+    quack_button = Button(window,text="Quack",command = lambda: main_menu(), font=Font(family='Helvetica', size=15, weight='bold'))
+    quack_button.grid(column=2,row=2)
+    killer_button = Button(window,text="Killer",command = lambda: main_menu(), font=Font(family='Helvetica', size=15, weight='bold'))
+    killer_button.grid(column=3,row=2)
 
 
 
@@ -77,10 +88,18 @@ def player_name_photo(num_players):
     enter_button = Button(window,text="Add Player",command = lambda: get_name_and_add(name_entry.get(),num_players), font=Font(family='Helvetica', size=30, weight='bold'))
     enter_button.grid(column=2,row=5)
     enter_button.wait_variable(ready)
-    
-    
-    
 
+def getScore
+
+def scoreboard_dem(window, players):
+    window.label = []
+    for i in range(players):
+        window.label.append(Label(window, text= getScore(), font=Font(family='Helvetica', size=14, weight='bold')))
+        window.label[i].grid(column=i+1, row = 5, sticky=W)
+
+def demolition():
+    clearFrame(window)
+    scoreboard_dem(window, len(player_name_list))
 
 
 
@@ -101,3 +120,6 @@ def main_menu():
 
 main_menu()
 window.mainloop()
+
+#TODO
+#teams
