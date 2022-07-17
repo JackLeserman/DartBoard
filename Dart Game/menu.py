@@ -5,6 +5,7 @@ from tkinter.font import BOLD, Font
 from turtle import clear
 import  cv2 as cv
 import os
+import random as random
 
 window = Tk()
 ready = IntVar()
@@ -13,6 +14,7 @@ window.resizable(5,10)
 camera = cv.VideoCapture(0)
 
 player_name_list = []
+player_scores = []
 counter_player_tracker = 0
 
 def num_players_entry(num_players):
@@ -89,23 +91,57 @@ def player_name_photo(num_players):
     enter_button.grid(column=2,row=5)
     enter_button.wait_variable(ready)
 
-def getScore
+def initalize_score(num):
+    for i in range(len(player_name_list)):
+        player_scores.append(num)
+
+def getScore():
+    text = ""
+    bullet = " • "
+    for i in range(len(player_name_list)):
+        name = player_name_list[i]
+        score = player_scores[i]
+        text = text + name + ": " + str(score)
+        if(i != (len(player_name_list)-1)):
+            text = text + bullet
+    return text
+
 
 def scoreboard_dem(window, players):
-    window.label = []
-    for i in range(players):
-        window.label.append(Label(window, text= getScore(), font=Font(family='Helvetica', size=14, weight='bold')))
-        window.label[i].grid(column=i+1, row = 5, sticky=W)
+    scoreboard = Label(window, text= getScore(), font=Font(family='Helvetica', size=14, weight='bold'))
+    scoreboard.grid(column=2, row=3)
+
+def game_navbar():
+    MSA_button = Button(window,text="Manual Score Adjust",command = lambda: num_players_entry(spin.get()), font=Font(family='Helvetica', size=10))
+    MSA_button.grid(column=1,row=9)
+    home_button = Button(window,text="Quit Game",command = lambda: main_menu(), font=Font(family='Helvetica', size=10))
+    home_button.grid(column=3,row=9)
+    endturn_button = Button(window,text="-- END TURN --",command = lambda: main_menu(), font=Font(family='Helvetica', size=20, weight='bold'))
+    endturn_button.configure(bg="red")
+    endturn_button.grid(column=2,row=9)
+    
+
+def player_game_info(player, throw):
+    infotext = player + "'s Turn. Throw: " + str(throw) + "/3"
+    players_info = Label(window, text=infotext, font=Font(family='Helvetica', size=20, weight='bold'))
+    players_info.grid(column=2, row =2)
 
 def demolition():
+    winner = False
     clearFrame(window)
+    initalize_score(180)
     scoreboard_dem(window, len(player_name_list))
-
+    game_navbar()
+    player_game_info(player_name_list[1],1) #TODO REMOVE
+    players_title = Label(window, text="Demolition", font=Font(family='Helvetica', size=20, weight='bold'))
+    players_title.grid(column=2, row =1)
 
 
 ########### HOME SCREEN -- SELECT NUMBER PLAYERS ##################
 def main_menu():    
     clearFrame(window)
+    player_name_list.clear()
+    player_scores.clear()
     window.title("Menu")
     welcome_title = Label(window, text="Dart Time", font=Font(family='Helvetica', size=40, weight='bold'))
     players_title = Label(window, text="Select Number of Players", font=Font(family='Helvetica', size=30))
@@ -123,3 +159,4 @@ window.mainloop()
 
 #TODO
 #teams
+#quitgame confirm?
