@@ -1,4 +1,3 @@
-# importing libraries
 import numpy as np
 import cv2
 
@@ -50,6 +49,7 @@ while(1):
 
     except:
         print("error")
+    cv2.imshow('frame', img_erosion)
     k = cv2.waitKey(200) & 0xff
     if k == 27:
         break

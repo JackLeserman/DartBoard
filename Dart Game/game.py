@@ -41,7 +41,7 @@ def live_blue():
             frame = cv2.rotate(frame,cv2.ROTATE_180)
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
             mask_all = cv2.inRange(hsv, (87, 44, 97), (109, 255,255))
-            cv2.imshow( "video output", mask_all)
+            cv2.imshow("video output", mask_all)
 
         if cv2.waitKey(1) & 0xFF == ord( 'x' ):   
             break
