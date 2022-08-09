@@ -1,8 +1,8 @@
 import  cv2
 def takePic(): 
     cam = cv2.VideoCapture(1)
-    cam.set(cv2.CAP_PROP_FRAME_WIDTH, 3840)
-    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 2448)
+    #cam.set(cv2.CAP_PROP_FRAME_WIDTH, 3840)
+    #cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 2448)
     cv2.namedWindow("test")
     img_counter = 0
     ret, frame = cam.read()

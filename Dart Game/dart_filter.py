@@ -3,11 +3,15 @@ import cv2
 
 list_avg_x = []
 list_avg_y = []
+point = (0,0)
 # creating object
 fgbg1 = cv2.bgsegm.createBackgroundSubtractorMOG()
   
 # capture frames from a camera 
 cap = cv2.VideoCapture(1)
+ret, frame = cap.read()
+cv2.imwrite('board.png', frame)
+
 
 while(1):
     # read frames
@@ -43,8 +47,12 @@ while(1):
         largest_contour = sorted_contours[0]
         largest_area = cv2.contourArea(largest_contour)
         right = tuple(largest_contour[largest_contour[:,:,0].argmax()][0])
-        print(right) #RETURN POINT    
-        print(largest_area)
+        
+        if(largest_area > 600):
+            point = right
+            break
+            #print(right) #RETURN POINT    
+            #print(largest_area)
 
 
     except:
@@ -54,8 +62,9 @@ while(1):
     if k == 27:
         break
 
-    
-
+cv2.circle(frame, point, 10, (0, 0, 255), -1)
+cv2.imshow('frame', frame)
+cv2.waitKey(0)
 print("DONE")
 cap.release();
 cv2.destroyAllWindows();
