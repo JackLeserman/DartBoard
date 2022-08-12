@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import math
 
 list_avg_x = []
 list_avg_y = []
@@ -10,13 +11,14 @@ fgbg1 = cv2.bgsegm.createBackgroundSubtractorMOG()
 # capture frames from a camera 
 cap = cv2.VideoCapture(1)
 ret, frame = cap.read()
+#frame = cv2.rotate(frame,cv2.ROTATE_180)
 cv2.imwrite('board.png', frame)
 
 
 while(1):
     # read frames
     ret, img = cap.read()
-      
+    #img = cv2.rotate(img,cv2.ROTATE_180)
     # apply mask for background subtraction
     fgmask1 = fgbg1.apply(img)
 
@@ -62,9 +64,24 @@ while(1):
     if k == 27:
         break
 
+def rotate_point(frame, point):
+    dimensions = frame.shape
+    frame_x = dimensions[1]
+    frame_y = dimensions[0]
+    x = abs(point[0] - frame_x)
+    y = abs(point[1] - frame_y)
+    point = (x, y)
+    return(point)
+
+#point = rotate_point(frame, point)
+print(point)
+#warp = np.load('transformation_matrix.npy', mmap_mode='r')
+
 cv2.circle(frame, point, 10, (0, 0, 255), -1)
+#frame = cv2.rotate(frame,cv2.ROTATE_180)
 cv2.imshow('frame', frame)
+
 cv2.waitKey(0)
 print("DONE")
-cap.release();
-cv2.destroyAllWindows();
+cap.release()
+cv2.destroyAllWindows()

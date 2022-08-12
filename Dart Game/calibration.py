@@ -1,105 +1,69 @@
-from ensurepip import version
+
+# importing the module
 import cv2
 import numpy as np
 
-grn_Upper_HSV = (92, 186, 199)
-grn_Lower_HSV = (30, 35, 142)
+clicks = 0
+points = []
+# function to display the coordinates of
+# of the points clicked on the image
 
-red_Upper_HSV = (12, 255, 255)
-red_Lower_HSV = (0, 61, 148)
+def reset_values():
+    global clicks
+    global points
+    clicks = 0
+    points = []
 
-Upper_HSV = (100, 255, 255)
-Lower_HSV = (86, 85, 165)
-
-centroids = []
-westmost = (0,0)
-eastmost = (0,0)
-northmost = (0,0)
-southmost = (0,0)
-
-img = cv2.imread('p1.png')
-
-def get_rings():
-    img = cv2.imread('transform.png')
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    mask_grn = cv2.inRange(img, grn_Lower_HSV, grn_Upper_HSV)
-    mask_red = cv2.inRange(img, red_Lower_HSV, red_Upper_HSV)
-
-    rings = cv2.add(mask_grn, mask_red)
-
-def get_transform_points():
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    mask = cv2.inRange(hsv, Lower_HSV, Upper_HSV)
-
-    #contour detection
-    gaussian = cv2.GaussianBlur(mask,(3,3),cv2.BORDER_DEFAULT)
-    edges = cv2.Canny(gaussian,100,200)
-    contours, hierarchy= cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-
-    def get_contour_areas(contours):
-
-        all_areas= []
-
-        for cnt in contours:
-            area= cv2.contourArea(cnt)
-            all_areas.append(area)
-
-        return all_areas
+def click_event(event, x, y, flags, params):
+    global clicks
+    global points
+    # checking for left mouse clicks
+    if event == cv2.EVENT_LBUTTONDOWN:
+ 
+        # displaying the coordinates
+        # on the Shell
+        points.append((x,y))
+        clicks = clicks + 1
+        if(clicks == 4):
+            cv2.destroyAllWindows()
+            return points
 
 
+ 
+def select_points(image):
+    # reading the image
 
-    sorted_contours= sorted(contours, key=cv2.contourArea, reverse= True)
-    for i in range(4):
-        i = sorted_contours[i]
-        M = cv2.moments(i)
-        if M['m00'] != 0:
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
-            centroid = (cx, cy)
-            centroids.append(centroid)
+    # displaying the image
+    cv2.imshow('image', image)
 
+    # setting mouse handler for the image
+    # and calling the click_event() function
+    cv2.setMouseCallback('image', click_event)
 
-    northmost = centroids[0]
-    southmost = centroids[0]
-    eastmost = centroids[0]
-    westmost = centroids[0]
-
-    for i in centroids:
-        if northmost[1] > i[1]:
-            northmost = i 
-        if southmost[1] < i[1]:
-            southmost = i
-        if westmost[0] > i[0]:
-            westmost = i 
-        if eastmost[0] < i[0]:
-            eastmost = i
-
-    # cv2.putText(img, "north", (northmost),
-    #                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    # cv2.putText(img, "south", (southmost),
-    #                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    # cv2.putText(img, "west", (westmost),
-    #                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    # cv2.putText(img, "east", (eastmost),
-    #                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    # cv2.line(img, northmost, southmost, (0, 255, 0), 2)
-    # cv2.line(img, eastmost, westmost, (0, 0, 255), 2)
-
-    print("North = " + str(northmost))
-    print("South = " + str(southmost))
-    print("West = " + str(westmost))
-    print("East = " + str(eastmost))
-    
-    src_pts = np.array([northmost, southmost, westmost, eastmost], dtype=np.float32)
-    dst_pts = np.array([(250,0), (250,500),(0,250),(500,250)], dtype=np.float32)
-
-    M = cv2.getPerspectiveTransform(src_pts, dst_pts)
-    warp = cv2.warpPerspective(img, M, (500, 500))
-
-    cv2.imshow("Difference", warp)
+    # wait for a key to be pressed to exit
     cv2.waitKey(0)
-    return(M)
+    # close the window
+    cv2.destroyAllWindows()
 
+img = cv2.imread('left_cam.png', 1)
+board = cv2.imread('board_calibration.png', 1)
 
-get_rings()
-#get_transform_points()
+select_points(board)
+board_points = points
+reset_values()
+
+select_points(img)
+cam_points = points
+reset_values()
+
+board_points = np.array([board_points[0], board_points[1], board_points[2], board_points[3]], dtype=np.float32)
+cam_points = np.array([cam_points[0], cam_points[1], cam_points[2],cam_points[3]], dtype=np.float32)
+
+cam_to_board = cv2.getPerspectiveTransform(cam_points, board_points)
+warp = cv2.warpPerspective(img, cam_to_board, (640, 480))
+print(cam_to_board)
+np.save("transformation_matrix", cam_to_board, allow_pickle=True, fix_imports=True)
+cv2.imshow("Warp", warp)
+cv2.waitKey(0)
+
+#warp = np.load('transformation_matrix.npy', mmap_mode='r')
