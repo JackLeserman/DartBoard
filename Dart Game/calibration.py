@@ -60,6 +60,8 @@ board_points = np.array([board_points[0], board_points[1], board_points[2], boar
 cam_points = np.array([cam_points[0], cam_points[1], cam_points[2],cam_points[3]], dtype=np.float32)
 
 cam_to_board = cv2.getPerspectiveTransform(cam_points, board_points)
+print(cam_to_board)
+
 warp = cv2.warpPerspective(img, cam_to_board, (640, 480))
 print(cam_to_board)
 np.save("transformation_matrix", cam_to_board, allow_pickle=True, fix_imports=True)

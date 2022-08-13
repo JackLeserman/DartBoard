@@ -7,7 +7,7 @@ def takePic():
     img_counter = 0
     ret, frame = cam.read()
     frame = cv2.rotate(frame,cv2.ROTATE_180)
-    cv2.imwrite('left_cam.png', frame)
+    cv2.imwrite('right_cam.png', frame)
 
 def take2Pics(): 
     cam = cv2.VideoCapture(1)

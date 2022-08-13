@@ -49,10 +49,10 @@ while(1):
         sorted_contours= sorted(contours, key=cv2.contourArea, reverse= True)
         largest_contour = sorted_contours[0]
         largest_area = cv2.contourArea(largest_contour)
-        right = tuple(largest_contour[largest_contour[:,:,0].argmax()][0])
+        left = tuple(largest_contour[largest_contour[:, :, 0].argmin()][0])
         
         if(largest_area > 600):
-            point = right
+            point = left
             break
             #print(right) #RETURN POINT    
             #print(largest_area)
@@ -74,6 +74,7 @@ def rotate_point(frame, point):
     point = (x, y)
     return(point)
 
+#TODO right version
 point = rotate_point(frame, point)
 point = get_transformed_point(point)
 
@@ -82,8 +83,8 @@ img = cv2.imread('board_calibration.png')
 
 cv2.circle(img, point, 5, (0, 0, 255), -1)
 cv2.imshow("img", img)
-cv2.waitKey(0)
 
+cv2.waitKey(0)
 
 print("DONE")
 cap.release()
