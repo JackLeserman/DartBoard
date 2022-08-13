@@ -45,7 +45,7 @@ def select_points(image):
     # close the window
     cv2.destroyAllWindows()
 
-img = cv2.imread('left_cam.png', 1)
+img = cv2.imread('right_cam.png', 1)
 board = cv2.imread('board_calibration.png', 1)
 
 select_points(board)

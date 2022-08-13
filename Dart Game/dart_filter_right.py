@@ -74,21 +74,14 @@ def rotate_point(frame, point):
     point = (x, y)
     return(point)
 
-#TODO right version
-point = rotate_point(frame, point)
-point = get_transformed_point(point)
-
 img = cv2.imread('board_calibration.png')
 
+point = rotate_point(frame, point)
+point = get_transformed_point(point, "right")
 
 cv2.circle(img, point, 5, (0, 0, 255), -1)
 cv2.imshow("img", img)
-
 cv2.waitKey(0)
-
-print("DONE")
-cap.release()
-cv2.destroyAllWindows()
 
 #TODO 
 #FIX ANGLED/WARP BOARD PLOTTING, ON THIS

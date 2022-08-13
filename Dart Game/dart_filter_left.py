@@ -75,7 +75,7 @@ def rotate_point(frame, point):
     return(point)
 
 point = rotate_point(frame, point)
-point = get_transformed_point(point)
+point = get_transformed_point(point, "left")
 
 img = cv2.imread('board_calibration.png')
 
