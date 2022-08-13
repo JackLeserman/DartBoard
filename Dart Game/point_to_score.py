@@ -74,43 +74,45 @@ def angle_to_score(angle):
         return score
     return score
 
-
+#takes in a point, outputs (ring, score)
 def get_score(point):
 
     polar = cart_to_polar(point)
     print(polar)
     dist = polar[0]
+    print(dist)
     wedge = angle_to_score(polar[1])
     
-    if(0<=dist and dist<= 6):
+    if(0<=dist<=7):
         ring = "be_50"
         score =  50
         return(ring, score)
     
-    if(6<dist and dist<= 10):
+    if(7<dist<=18):
         ring = "be_25"
         score = 25
         return(ring, score)
 
-    if(10<dist and dist<= 101):
+    if(10<dist<=101):
         ring = "single_1"
         score = wedge
         return(ring, score)
     
-    if(101<dist and dist<=111):
+    if(101<dist<=111):
         ring = "double"
         score = wedge * 2
         return(ring, score)
-
-    if(dist<111 and dist<=168):
+    if(111<dist<=168):
         ring = "single_2"
         score = wedge
         return(ring, score)
     
-    if(dist<168 and dist<=179):
+    if(168<dist<=179):
         ring = "triple"
         score = wedge * 3
         return(ring, score)
+    
+    return("miss", 0)
 
 def score_to_text(score):
     print("score = " + score[1])   
