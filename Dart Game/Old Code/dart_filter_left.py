@@ -13,7 +13,6 @@ fgbg1 = cv2.bgsegm.createBackgroundSubtractorMOG()
 cap = cv2.VideoCapture(1)
 ret, frame = cap.read()
 #frame = cv2.rotate(frame,cv2.ROTATE_180)
-cv2.imwrite('board.png', frame)
 
 
 while(1):
@@ -49,10 +48,10 @@ while(1):
         sorted_contours= sorted(contours, key=cv2.contourArea, reverse= True)
         largest_contour = sorted_contours[0]
         largest_area = cv2.contourArea(largest_contour)
-        left = tuple(largest_contour[largest_contour[:, :, 0].argmin()][0])
+        right = tuple(largest_contour[largest_contour[:,:,0].argmax()][0])
         
         if(largest_area > 600):
-            point = left
+            point = right
             break
             #print(right) #RETURN POINT    
             #print(largest_area)
@@ -74,14 +73,23 @@ def rotate_point(frame, point):
     point = (x, y)
     return(point)
 
+point = rotate_point(frame, point)
+point = get_transformed_point(point, "left")
+
+print("Left")
+print(point)
+
 img = cv2.imread('board_calibration.png')
 
-point = rotate_point(frame, point)
-point = get_transformed_point(point, "right")
 
 cv2.circle(img, point, 5, (0, 0, 255), -1)
 cv2.imshow("img", img)
 cv2.waitKey(0)
+
+
+print("DONE")
+cap.release()
+cv2.destroyAllWindows()
 
 #TODO 
 #FIX ANGLED/WARP BOARD PLOTTING, ON THIS

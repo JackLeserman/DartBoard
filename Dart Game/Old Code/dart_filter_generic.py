@@ -91,6 +91,7 @@ def filter(camera):
         print("right")
         print(point)
     
+#return here, show images in other function
 
     img = cv2.imread('board_calibration.png')
 

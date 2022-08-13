@@ -3,25 +3,21 @@ import cv2
 import math
 from transform_point import get_transformed_point
 from multiprocessing import Process
-import dart_filter_generic
+import threading
+from dart_to_point_left import get_dart_left
+from dart_to_point_right import get_dart_right
 
-def filter(camID):
-        dart_filter_generic.filter(camID)
-        print("done" + camID)
+from threading import Thread
 
+def func1():
+    left_point = get_dart_left()
+    print(left_point)
+    return left_point
 
-if __name__ == '__main__':
-        #f(0)
-        '''
-        t0 = threading.Thread(target=f, args= (0,))
-        t0.start()
-        t1 = threading.Thread(target=f, args= (1,))
-        t1.start()
-        '''
+def func2():
+    right_point = get_dart_right()
+    print(right_point)
+    return right_point
 
-        left = 1
-        right = 2
-        p0 = Process(target=filter, args=(left,))
-        p0.start()
-        p1 = Process(target=filter, args=(right,))
-        p1.start()
+lp = Thread(target = func1).start()
+rp = Thread(target = func2).start()
