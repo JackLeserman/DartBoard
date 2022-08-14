@@ -79,7 +79,7 @@ def get_dart_left():
     point = rotate_point(frame, point)
     point = get_transformed_point(point, "left")
 
-    #return(point)
+    return(point)
     
     # print(point)
     # img = cv2.imread('board_calibration.png')
